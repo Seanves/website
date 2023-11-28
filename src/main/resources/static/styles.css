@@ -1,0 +1,108 @@
+
+body {
+    margin: 0
+}
+
+:root {
+    --bar-width: 30px;
+    --bar-height: 5px;
+    --sidebar-gap: 5px;
+    --foreground: #333;
+    --background: white;
+    --sidebar-margin: 8px;
+    --animation-timing: 200ms ease-in-out;
+    --sidebar-height: calc(var(--bar-height) * 3 + var(--sidebar-gap) * 2);
+}
+
+.sidebar-menu {
+    --x-width: calc(var(--sidebar-height) * 1.41421356237);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sidebar-gap);
+    width: max-content;
+    position: absolute;
+    top: var(--sidebar-margin);
+    left: var(--sidebar-margin);
+    z-index: 2;
+    cursor: pointer;
+}
+.sidebar-menu:has(input:checked) {
+    --foreground: white;
+    --background: #333;
+}
+.sidebar-menu:has(input:focus-visible)::before,
+.sidebar-menu:has(input:focus-visible)::after,
+.sidebar-menu input:focus-visible {
+    border: 1px solid var(--background);
+    box-shadow: 0 0 0 1px var(--foreground);
+}
+.sidebar-menu::before,
+.sidebar-menu::after,
+.sidebar-menu input {
+    content: "";
+    width: var(--bar-width);
+    height: var(--bar-height);
+    background-color: var(--foreground);
+    border-radius: 9999px;
+    transform-origin: left center;
+    transition: opacity var(--animation-timing), width var(--animation-timing),
+    rotate var(--animation-timing), translate var(--animation-timing),
+    background-color var(--animation-timing);
+}
+.sidebar-menu input {
+    appearance: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    pointer-events: none;
+}
+.sidebar-menu:has(input:checked)::before {
+    rotate: 45deg;
+    width: var(--x-width);
+    translate: 0 calc(var(--bar-height) / -2);
+}
+.sidebar-menu:has(input:checked)::after {
+    rotate: -45deg;
+    width: var(--x-width);
+    translate: 0 calc(var(--bar-height) / 2);
+}
+.sidebar-menu input:checked {
+    opacity: 0;
+    width: 0;
+}
+.sidebar {
+    transition: translate var(--animation-timing);
+    translate: -100%;
+    padding: calc(var(--sidebar-height) + var(--sidebar-margin) + 1rem) 1rem 0.5rem;
+    background-color: var(--foreground);
+    color: var(--background);
+    max-width: 10rem;
+    min-height: 100vh;
+}
+.sidebar-menu:has(input:checked) + .sidebar {
+    translate: 0;
+}
+
+aside > a {
+    font-size: 40px;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    background: #4d4d4d;
+    margin: 10px;
+}
+
+.container {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.green {
+    color: green;
+    font-family: "Roboto Light", serif;
+    font-size: 24px;
+}

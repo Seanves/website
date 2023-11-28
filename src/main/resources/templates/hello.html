@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello</title>
+    <link rel="stylesheet" href="styles.css"/>
 </head>
+
 <body>
-Hello <p th:text="${name}" style="display: inline;"></p>
+
+    <div class="container">
+        Hello <p th:text="${name}" style="display: inline;"></p>
+    </div>
+
+    <div th:include="sidebar"></div>
+
 </body>
 </html>
