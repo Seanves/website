@@ -9,10 +9,11 @@
 <body>
 
     <div class="container">
-        Hello <p th:text="${name}" style="display: inline;"></p>
+        <p style="font-size: 24px; margin: 10px;">Hello <span th:text="${name}"></span></p>
     </div>
 
-    <div th:include="sidebar"></div>
+    <div th:include="common/navbar"></div>
+    <div th:include="common/sidebar"></div>
 
 </body>
 </html>

@@ -4,21 +4,26 @@ body {
 }
 
 :root {
-    --bar-width: 30px;
-    --bar-height: 5px;
-    --sidebar-gap: 5px;
-    --foreground: #333;
-    --background: white;
-    --sidebar-margin: 8px;
+    --sidebar-line-width: 30px;
+    --sidebar-line-height: 5px;
+    --sidebar-lines-gap: 5px;
+    --sidebar-margin: calc((var(--navbar-height) - (var(--sidebar-line-height) * 3 + var(--sidebar-lines-gap) * 2)) / 2);
+    --sidebar-height: calc(var(--sidebar-lines-gap) * 3 + var(--sidebar-lines-gap) * 2);
     --animation-timing: 200ms ease-in-out;
-    --sidebar-height: calc(var(--bar-height) * 3 + var(--sidebar-gap) * 2);
+    --foreground: #868181;
+    --background: var(--foreground);
+    /*--background: white;*/
+    /*--default-color: #868181;*/
+    --sidebar-color: #333;
+    --navbar-color: #313131;
+    --navbar-height: 50px;
 }
 
 .sidebar-menu {
     --x-width: calc(var(--sidebar-height) * 1.41421356237);
     display: flex;
     flex-direction: column;
-    gap: var(--sidebar-gap);
+    gap: var(--sidebar-lines-gap);
     width: max-content;
     position: absolute;
     top: var(--sidebar-margin);
@@ -26,10 +31,10 @@ body {
     z-index: 2;
     cursor: pointer;
 }
-.sidebar-menu:has(input:checked) {
-    --foreground: white;
-    --background: #333;
-}
+/*.sidebar-menu:has(input:checked) {*/
+/*    --foreground: white;*/
+/*    --background: #333;*/
+/*}*/
 .sidebar-menu:has(input:focus-visible)::before,
 .sidebar-menu:has(input:focus-visible)::after,
 .sidebar-menu input:focus-visible {
@@ -40,8 +45,8 @@ body {
 .sidebar-menu::after,
 .sidebar-menu input {
     content: "";
-    width: var(--bar-width);
-    height: var(--bar-height);
+    width: var(--sidebar-line-width);
+    height: var(--sidebar-line-height);
     background-color: var(--foreground);
     border-radius: 9999px;
     transform-origin: left center;
@@ -59,12 +64,12 @@ body {
 .sidebar-menu:has(input:checked)::before {
     rotate: 45deg;
     width: var(--x-width);
-    translate: 0 calc(var(--bar-height) / -2);
+    translate: 0 calc(var(--sidebar-line-height) / -2);
 }
 .sidebar-menu:has(input:checked)::after {
     rotate: -45deg;
     width: var(--x-width);
-    translate: 0 calc(var(--bar-height) / 2);
+    translate: 0 calc(var(--sidebar-line-height) / 2);
 }
 .sidebar-menu input:checked {
     opacity: 0;
@@ -74,16 +79,16 @@ body {
     transition: translate var(--animation-timing);
     translate: -100%;
     padding: calc(var(--sidebar-height) + var(--sidebar-margin) + 1rem) 1rem 0.5rem;
-    background-color: var(--foreground);
-    color: var(--background);
+    background-color: var(--sidebar-color);
+    /*color: var(--background);*/
     max-width: 10rem;
-    min-height: 100vh;
+    min-height: 94.1vh;
 }
 .sidebar-menu:has(input:checked) + .sidebar {
     translate: 0;
 }
 
-aside > a {
+.sidebar > a {
     font-size: 40px;
     color: white;
     text-decoration: none;
@@ -93,9 +98,19 @@ aside > a {
     margin: 10px;
 }
 
+
+.navbar {
+    position: fixed;
+    min-width: 100vw;
+    height: var(--navbar-height);
+    background: var(--navbar-color);
+    box-shadow: 0px 1px 2px 1px black;
+}
+
+
 .container {
     position: fixed;
-    top: 40px;
+    top: var(--navbar-height);
     left: 0;
     width: 100vw;
     height: 100vh;
