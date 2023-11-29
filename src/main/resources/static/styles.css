@@ -17,6 +17,9 @@ body {
     --sidebar-color: #333;
     --navbar-color: #313131;
     --navbar-height: 50px;
+    --logo-size: 40px;
+    --logo-margin-vertical: calc((var(--navbar-height) - var(--logo-size)) / 2);
+    --logi-margin-horizontal: calc((var(--logo-size) / 2) + var(--logo-margin-vertical));
 }
 
 .sidebar-menu {
@@ -116,8 +119,38 @@ body {
     height: 100vh;
 }
 
+
+.logo {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    background: darkgray;
+    float: right;
+    margin: var(--logo-margin-vertical) var(--logi-margin-horizontal);
+    border-radius: 50%;
+}
+
+
 .green {
     color: green;
     font-family: "Roboto Light", serif;
     font-size: 24px;
+}
+
+.in-logo {
+    display: none;
+    position: fixed;
+    top: calc(var(--navbar-height) + 5px);
+    right: 2px;
+    width: 80px;
+    height: 100px;
+    background: rgb(128,128,128);
+    border-radius: 5px;
+}
+#toggle-in-logo:checked ~ .in-logo {
+    display: block;
+}
+.in-logo > * {
+    display: flex;
+    color: white;
+    justify-content: center;
 }
