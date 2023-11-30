@@ -136,21 +136,38 @@ body {
     font-size: 24px;
 }
 
+
+.name {
+    font-size: 44px;
+    margin: 30px 0;
+    display: inline-block;
+    transition: transform 1s;
+}
+.name:hover {
+    transform: scale(1.5);
+}
+
+
 .in-logo {
-    display: none;
+    overflow: hidden;
+    transition: height var(--animation-timing);
     position: fixed;
     top: calc(var(--navbar-height) + 5px);
     right: 2px;
     width: 80px;
-    height: 100px;
-    background: rgb(128,128,128);
+    background: #808080;
     border-radius: 5px;
 }
 #toggle-in-logo:checked ~ .in-logo {
-    display: block;
+    height: 100px;
 }
-.in-logo > * {
+#toggle-in-logo:not(:checked) ~ .in-logo {
+    height: 0;
+}
+.in-logo * {
     display: flex;
-    color: white;
     justify-content: center;
+    color: white;
 }
+
+
