@@ -9,11 +9,11 @@
 <body>
 
     <div class="container">
-        <p style="margin-left:50px; font-size: 44px">Hello <span class="name" th:text="${name}"></span></p>
+        <p style="margin-left:50px; font-size: 44px">Hello <span class="name" th:text="${name == null ? #authentication.getPrincipal().getPerson().getUsername() : name}"></span></p>
     </div>
 
-    <div th:include="common/navbar"></div>
-    <div th:include="common/sidebar"></div>
+    <div th:insert="~{common/navbar}"></div>
+    <div th:insert="~{common/sidebar}"></div>
 
 </body>
 </html>

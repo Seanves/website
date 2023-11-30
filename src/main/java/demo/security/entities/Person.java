@@ -17,20 +17,23 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 5, max = 100, message = "Имя должно быть от 5 до 100 символов")
+    @NotEmpty(message = "Name mustn't be empty")
+    @Size(min = 5, max = 100, message = "Name must be between 5 and 100 characters")
     @Column(name = "username")
     private String username;
 
-    @Min(value = 1900, message = "Минимальный год рождения 1900")
+    @Min(value = 1900, message = "Minimum year of birth 1900")
     @Column(name = "birthyear")
     private int birthyear;
 
-    @NotEmpty(message = "Пароль не должен быть пустым")
+    @NotEmpty(message = "Password mustn't be empty")
     @Column(name = "password")
     private String password;
 
     @Column(name = "role")
     private String role = "ROLE_USER";
+
+    @Column(name = "color")
+    private String color = "#808080";
 
 }

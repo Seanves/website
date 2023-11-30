@@ -7,17 +7,17 @@
 <body>
 
 <form th:method="POST" th:action="@{/register}" th:object="${person}">
-    <label for="username"> Введите имя: </label>
+    <label for="username"> Name: </label>
     <input type="text" th:field="*{username}" id="username"/>
     <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">eeee</div>
     <br/>
 
-    <label for="birthyear"> Введите год рождения: </label>
+    <label for="birthyear"> Birth year: </label>
     <input type="text" th:field="*{birthyear}" id="birthyear"/>
     <div style="color: red" th:if="${#fields.hasErrors('birthyear')}" th:errors="*{birthyear}">eee</div>
     <br/>
 
-    <label for="password"> Введите пароль: </label>
+    <label for="password"> Password: </label>
     <input type="password" th:field="*{password}" id="password"/>
     <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">eee</div>
     <br/>

@@ -23,10 +23,19 @@ public class PersonService {
         personRepository.save(person);
     }
 
-    public void changeYear(Person person, int year) {
-        personRepository.updateBirthyearById(person.getId(), year);
-//        person.setBirthyear(year);
-//        peopleRepository.save(person);
+//    public void changeYear(Person person, int year) {
+//        personRepository.updateBirthyearById(person.getId(), year);
+////        person.setBirthyear(year);
+////        peopleRepository.save(person);
+//    }
+
+//    public void changeColor(Person person, String color) {
+//        personRepository.updateColor(person, color);
+//    }
+
+    public void changeColor(Person person, String color) {
+        person.setColor(color);
+        personRepository.save(person);
     }
 
 }

@@ -3,6 +3,7 @@ package demo.security.controllers;
 import demo.security.services.PersonService;
 import demo.security.entities.Person;
 import demo.security.security.PersonDetails;
+import demo.security.util.ColorValidator;
 import demo.security.util.PersonValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,12 @@ public class MainController {
 
     @Autowired private final PersonValidator personValidator;
     @Autowired private final PersonService personService;
+//    @Autowired private final ColorValidator colorValidator;
 
 
     @GetMapping
-    public String sayHello(@RequestParam(required = false) String name, Model model) {
-        model.addAttribute("name", name != null ?  name : getCurrentPerson().getUsername());
+    public String hello(@RequestParam(required = false) String name, Model model) {
+        model.addAttribute("name", name);
         return "hello";
     }
 
@@ -63,6 +65,22 @@ public class MainController {
         return "error";
     }
 
+    @GetMapping("/settings")
+    public String settings() {
+        return "settings";
+    }
+
+    @PostMapping("/changeColor")
+    public String changeColor(@RequestParam String color, Model model) {
+//        String error = colorValidator.validate(color);
+//        if(error != null) {
+//            model.addAttribute("error", error);
+//            return "settings";
+//        }
+        personService.changeColor(getCurrentPerson(), color);
+        return "settings";
+    }
+
     @GetMapping("/admin")
     public String admin() {
         return "admin";
@@ -74,11 +92,18 @@ public class MainController {
         return "hello";
     }
 
-    @GetMapping("/changeYear")
-    public String changeYear(@RequestParam int year) {
-        personService.changeYear(getCurrentPerson(), year);
-        return "hello";
-    }
+//    @GetMapping("/changeYear")
+//    public String changeYear(@RequestParam int year) {
+//        personService.changeYear(getCurrentPerson(), year);
+//        return "hello";
+//    }
+
+//    @GetMapping("/changeColor")
+//    public String changeYear(@RequestParam String color) {
+//        System.out.println("color: " + color);
+//        personService.changeColor(getCurrentPerson(), color);
+//        return "hello";
+//    }
 
 
     private Person getCurrentPerson() {

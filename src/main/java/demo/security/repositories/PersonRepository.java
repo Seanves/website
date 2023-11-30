@@ -22,6 +22,8 @@ public interface PersonRepository extends JpaRepository<Person,Integer> {
     @Modifying
     @Query("UPDATE Person p SET p.birthyear = :birthyear WHERE p.id = :id")
     void updateBirthyearById(int id, int birthyear);
+
+//    void updateColor(Person person, String color);
 //
 //    @Modifying
 //    @Transactional

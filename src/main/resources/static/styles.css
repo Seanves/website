@@ -28,7 +28,7 @@ body {
     flex-direction: column;
     gap: var(--sidebar-lines-gap);
     width: max-content;
-    position: absolute;
+    position: fixed;
     top: var(--sidebar-margin);
     left: var(--sidebar-margin);
     z-index: 2;
@@ -113,7 +113,7 @@ body {
 
 .container {
     position: fixed;
-    top: var(--navbar-height);
+    top: calc(var(--navbar-height) + 5px);
     left: 0;
     width: 100vw;
     height: 100vh;
@@ -127,6 +127,16 @@ body {
     float: right;
     margin: var(--logo-margin-vertical) var(--logi-margin-horizontal);
     border-radius: 50%;
+    overflow: hidden;
+}
+
+.big-logo {
+    display: inline-block;
+    width: calc(var(--logo-size) * 3);
+    height: calc(var(--logo-size) * 3);
+    margin: var(--logo-margin-vertical) var(--logi-margin-horizontal);
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 
@@ -152,7 +162,7 @@ body {
     overflow: hidden;
     transition: height var(--animation-timing);
     position: fixed;
-    top: calc(var(--navbar-height) + 5px);
+    top: calc(var(--navbar-height));
     right: 2px;
     width: 80px;
     background: #808080;
