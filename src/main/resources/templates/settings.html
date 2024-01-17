@@ -9,19 +9,27 @@
 <body>
     <div class="container">
         <div>
-            <label class="big-logo" th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
+            <label class="big-logo" id="big-logo" th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
                 <img src="images/profile_icon.svg">
             </label>
             <span th:text="${#authentication.getPrincipal().getPerson().getUsername()}" style="font-size: 30px; vertical-align: top"></span>
         </div>
         <form action="/changeColor" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <label for="text-input">Change color:</label>
-            <input type="color" id="text-input" name="color" required  th:value="${#authentication.getPrincipal().getPerson().getColor()}">
+            <label for="color-input">Change color:</label>
+            <input type="color" id="color-input" name="color" required  th:value="${#authentication.getPrincipal().getPerson().getColor()}">
             <button type="submit">Ok</button>
         </form>
         <p th:if="${error != null}" style="color:red" th:text="${error}"></p>
     </div>
+
+    <script>
+        document.getElementById('color-input').addEventListener('input', function(event) {
+            var color = event.target.value;
+            document.getElementById('big-logo').style.backgroundColor = color;
+        });
+    </script>
+
     <div th:insert="~{common/navbar}"></div>
     <div th:insert="~{common/sidebar}"></div>
 </body>
