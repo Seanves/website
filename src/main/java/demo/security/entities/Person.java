@@ -1,11 +1,11 @@
 package demo.security.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 
 
 @Entity @Data
@@ -18,13 +18,13 @@ public class Person {
     private int id;
 
     @NotEmpty(message = "Name mustn't be empty")
-    @Size(min = 5, max = 100, message = "Name must be between 5 and 100 characters")
+    @Size(min = 5, max = 20, message = "Name must be from 5 to 20 chars")
     @Column(name = "username")
     private String username;
 
     @Min(value = 1900, message = "Minimum year of birth 1900")
     @Column(name = "birthyear")
-    private int birthyear;
+    private int birthYear;
 
     @NotEmpty(message = "Password mustn't be empty")
     @Column(name = "password")

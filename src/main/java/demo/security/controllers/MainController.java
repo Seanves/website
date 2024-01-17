@@ -29,9 +29,9 @@ public class MainController {
 
 
     @GetMapping
-    public String hello(@RequestParam(required = false) String name, Model model) {
-        model.addAttribute("name", name);
-        return "hello";
+    public String mainPage(@RequestParam(required = false) String name, Model model) {
+        model.addAttribute("name", name == null ? getCurrentPerson().getUsername() : name);
+        return "main";
     }
 
     @GetMapping("/login")

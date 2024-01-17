@@ -2,28 +2,28 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Register</title>
+    <link rel="stylesheet" href="../styles.css"/>
 </head>
-<body>
+<body class="auth-page">
 
-<form th:method="POST" th:action="@{/register}" th:object="${person}">
-    <label for="username"> Name: </label>
-    <input type="text" th:field="*{username}" id="username"/>
-    <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">eeee</div>
-    <br/>
+<div class="auth">
+    <form th:method="POST" th:action="@{/register}" th:object="${person}">
+        <label for="username"> Name: </label>
+        <input type="text" th:field="*{username}" id="username"/>
+        <div class="auth-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 
-    <label for="birthyear"> Birth year: </label>
-    <input type="text" th:field="*{birthyear}" id="birthyear"/>
-    <div style="color: red" th:if="${#fields.hasErrors('birthyear')}" th:errors="*{birthyear}">eee</div>
-    <br/>
+        <label for="birthyear"> Birth year: </label>
+        <input type="text" th:field="*{birthYear}" id="birthyear"/>
+        <div class="auth-error" th:if="${#fields.hasErrors('birthYear')}" th:errors="*{birthYear}"></div>
 
-    <label for="password"> Password: </label>
-    <input type="password" th:field="*{password}" id="password"/>
-    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">eee</div>
-    <br/>
+        <label for="password"> Password: </label>
+        <input type="password" th:field="*{password}" id="password"/>
+        <div class="auth-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 
-    <input type="submit" value="Register">
-</form>
+        <input type="submit" value="Register" class="auth-button">
+    </form>
+</div>
 
 </body>
 </html>

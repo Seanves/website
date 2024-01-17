@@ -27,12 +27,15 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person)o;
-        try {
-            personDetailsService.loadUserByUsername(person.getUsername());
-        } catch (UsernameNotFoundException e) {
-            return;
+
+        if (person.getPassword() .equals( person.getUsername()) && !person.getPassword().isBlank()) {
+            errors.rejectValue("password", "", "Password and name are the same");
         }
 
-        errors.rejectValue("username", "", "Человек с таким именем уже существует");
+        try {
+            personDetailsService.loadUserByUsername(person.getUsername());
+            errors.rejectValue("username", "", "Name already taken");
+        } catch (UsernameNotFoundException e) {}
+
     }
 }

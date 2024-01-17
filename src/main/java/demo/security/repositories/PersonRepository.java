@@ -20,8 +20,8 @@ public interface PersonRepository extends JpaRepository<Person,Integer> {
     @Override Person save(Person person);
 
     @Modifying
-    @Query("UPDATE Person p SET p.birthyear = :birthyear WHERE p.id = :id")
-    void updateBirthyearById(int id, int birthyear);
+    @Query("UPDATE Person p SET p.birthYear = :birthYear WHERE p.id = :id")
+    void updateBirthYearById(int id, int birthYear);
 
 //    void updateColor(Person person, String color);
 //

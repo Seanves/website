@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hello</title>
+    <title>Main</title>
     <link rel="stylesheet" href="styles.css"/>
 </head>
 
 <body>
 
     <div class="container">
-        <p style="margin-left:50px; font-size: 44px">Hello <span class="name" th:text="${name == null ? #authentication.getPrincipal().getPerson().getUsername() : name}"></span></p>
+        <p style="margin-left:50px; font-size: 44px">Hello <span class="name" th:text="${name}"></span></p>
     </div>
 
     <div th:insert="~{common/navbar}"></div>
