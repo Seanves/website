@@ -8,14 +8,10 @@
 <body class="auth-page">
 
 <div class="auth">
-    <form th:method="POST" th:action="@{/register}" th:object="${person}">
+    <form th:method="POST" th:action="@{/register}" th:object="${userDTO}">
         <label for="username"> Name: </label>
         <input type="text" th:field="*{username}" id="username"/>
         <div class="auth-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-
-        <label for="birthyear"> Birth year: </label>
-        <input type="text" th:field="*{birthYear}" id="birthyear"/>
-        <div class="auth-error" th:if="${#fields.hasErrors('birthYear')}" th:errors="*{birthYear}"></div>
 
         <label for="password"> Password: </label>
         <input type="password" th:field="*{password}" id="password"/>

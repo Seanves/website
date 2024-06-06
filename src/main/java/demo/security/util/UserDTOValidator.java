@@ -1,7 +1,7 @@
 package demo.security.util;
 
-import demo.security.services.PersonDetailsService;
-import demo.security.entities.Person;
+import demo.security.entities.dto.UserDTO;
+import demo.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -9,31 +9,35 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class PersonValidator implements Validator {
+public class UserDTOValidator implements Validator {
 
-    private final PersonDetailsService personDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    public PersonValidator(PersonDetailsService personDetailsService) {
-        this.personDetailsService = personDetailsService;
+    public UserDTOValidator(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Person.class.equals(clazz);
+        return UserDTO.class.equals(clazz);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        Person person = (Person)o;
+        UserDTO user = (UserDTO)o;
 
-        if (person.getPassword() .equals( person.getUsername()) && !person.getPassword().isBlank()) {
+        if (user.getPassword() .equals( user.getUsername()) && !user.getPassword().isBlank()) {
             errors.rejectValue("password", "", "Password and name are the same");
         }
 
+        if (user.getUsername().contains(" ")) {
+            errors.rejectValue("username", "", "Username contains space");
+        }
+
         try {
-            personDetailsService.loadUserByUsername(person.getUsername());
+            userDetailsService.loadUserByUsername(user.getUsername());
             errors.rejectValue("username", "", "Name already taken");
         } catch (UsernameNotFoundException e) {}
 

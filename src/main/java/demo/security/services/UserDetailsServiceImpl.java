@@ -1,8 +1,8 @@
 package demo.security.services;
 
-import demo.security.repositories.PersonRepository;
-import demo.security.entities.Person;
-import demo.security.security.PersonDetails;
+import demo.security.repositories.UserRepository;
+import demo.security.entities.User;
+import demo.security.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,24 +12,24 @@ import java.util.Optional;
 
 
 @Service
-public class PersonDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public PersonDetailsService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Person> optional = personRepository.findByUsername(username);
+        Optional<User> optional = userRepository.findByUsername(username);
         if(optional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new PersonDetails(optional.get());
+        return new UserDetailsImpl(optional.get());
     }
 }

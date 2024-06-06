@@ -1,98 +1,98 @@
 
-body {
-    margin: 0
-}
-
 :root {
+    --sidebar-color: #333;
+    --sidebar-button-color: #868181;
+    --navbar-color: #313131;
+    --navbar-items-color: #4d4d4d;
+    --in-logo-droplist-droplist-color: #808080;
+    --auth-color: #36363b;
+
+    --auth-border: 1px solid #70777b;
+
     --sidebar-line-width: 30px;
     --sidebar-line-height: 5px;
     --sidebar-lines-gap: 5px;
     --sidebar-margin: calc((var(--navbar-height) - (var(--sidebar-line-height) * 3 + var(--sidebar-lines-gap) * 2)) / 2);
     --sidebar-height: calc(var(--sidebar-lines-gap) * 3 + var(--sidebar-lines-gap) * 2);
-    --animation-timing: 200ms ease-in-out;
-
-    --sidebar-color: #333;
-    --sidebar-button-color: #868181;
-    --navbar-color: #313131;
-    --navbar-items-color: #4d4d4d;
-    --in-logo-droplist-color: #808080;
-    --auth-color: #36363b;
-
-    --auth-border: 1px solid #70777b;
+    --sidebar-open-line-width: calc(var(--sidebar-height) * 1.41421356237);
+    --animation-timing: 200ms ease-out;
 
     --navbar-height: 50px;
-    --logo-size: 40px;
+    --logo-size: 38px;
     --logo-margin-vertical: calc((var(--navbar-height) - var(--logo-size)) / 2);
-    --logi-margin-horizontal: calc((var(--logo-size) / 2) + var(--logo-margin-vertical));
+    --logo-margin-horizontal: var(--logo-margin-vertical);
 }
 
-.sidebar-menu {
-    --x-width: calc(var(--sidebar-height) * 1.41421356237);
+body {
+    margin: 0
+}
+
+.sidebar-toggle {
     display: flex;
     flex-direction: column;
     gap: var(--sidebar-lines-gap);
     width: max-content;
-    position: fixed;
+    position: absolute;
     top: var(--sidebar-margin);
     left: var(--sidebar-margin);
-    z-index: 2;
+    z-index: 3;
     cursor: pointer;
 }
-/*.sidebar-menu:has(input:checked) {*/
+/*.sidebar-toggle:has(input:checked) {*/
 /*    --foreground: white;*/
 /*    --background: #333;*/
 /*}*/
-.sidebar-menu:has(input:focus-visible)::before,
-.sidebar-menu:has(input:focus-visible)::after,
-.sidebar-menu input:focus-visible {
+.sidebar-toggle:has(input:focus-visible)::before,
+.sidebar-toggle:has(input:focus-visible)::after,
+.sidebar-toggle input:focus-visible {
     border: 1px solid var(--sidebar-button-color);
     box-shadow: 0 0 0 1px var(--sidebar-button-color);
 }
-.sidebar-menu::before,
-.sidebar-menu::after,
-.sidebar-menu input {
+.sidebar-toggle::before,
+.sidebar-toggle::after,
+.sidebar-toggle input {
     content: "";
     width: var(--sidebar-line-width);
     height: var(--sidebar-line-height);
     background-color: var(--sidebar-button-color);
-    border-radius: 9999px;
+    border-radius: var(--sidebar-line-height);
     transform-origin: left center;
     transition: opacity var(--animation-timing), width var(--animation-timing),
     rotate var(--animation-timing), translate var(--animation-timing),
     background-color var(--animation-timing);
 }
-.sidebar-menu input {
+.sidebar-toggle input {
     appearance: none;
     padding: 0;
     margin: 0;
     outline: none;
     pointer-events: none;
 }
-.sidebar-menu:has(input:checked)::before {
+.sidebar-toggle:has(input:checked)::before {
     rotate: 45deg;
-    width: var(--x-width);
+    width: var(--sidebar-open-line-width);
     translate: 0 calc(var(--sidebar-line-height) / -2);
 }
-.sidebar-menu:has(input:checked)::after {
+.sidebar-toggle:has(input:checked)::after {
     rotate: -45deg;
-    width: var(--x-width);
+    width: var(--sidebar-open-line-width);
     translate: 0 calc(var(--sidebar-line-height) / 2);
 }
-.sidebar-menu input:checked {
+.sidebar-toggle input:checked {
     opacity: 0;
     width: 0;
 }
+
 .sidebar {
+    position: fixed;
+    z-index: 2;
     transition: translate var(--animation-timing);
     translate: -100%;
     padding: calc(var(--sidebar-height) + var(--sidebar-margin) + 1rem) 1rem 0.5rem;
     background-color: var(--sidebar-color);
-    /*color: var(--background);*/
+    /* color: var(--background); */
     max-width: 10rem;
-    height: 93.6vh;
-}
-.sidebar-menu:has(input:checked) + .sidebar {
-    translate: 0;
+    height: 100vh;
 }
 
 .sidebar > a {
@@ -105,9 +105,12 @@ body {
     margin: 10px;
 }
 
+.sidebar-toggle:has(input:checked) ~ .sidebar {
+    translate: 0%;
+}
+
 
 .navbar {
-    position: fixed;
     min-width: 100vw;
     height: var(--navbar-height);
     background: var(--navbar-color);
@@ -116,12 +119,9 @@ body {
 
 
 .container {
-    position: fixed;
-    top: calc(var(--navbar-height) + 5px);
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     overflow: auto;
+    max-height: calc(100vh - var(--sidebar-height) * 2);
+    overflow-wrap: break-word;
 }
 
 
@@ -130,7 +130,7 @@ body {
     height: var(--logo-size);
     background: darkgray;
     float: right;
-    margin: var(--logo-margin-vertical) var(--logi-margin-horizontal);
+    margin: var(--logo-margin-vertical) var(--logo-margin-horizontal);
     border-radius: 50%;
     overflow: hidden;
 }
@@ -139,7 +139,7 @@ body {
     display: inline-block;
     width: calc(var(--logo-size) * 3);
     height: calc(var(--logo-size) * 3);
-    margin: var(--logo-margin-vertical) var(--logi-margin-horizontal);
+    margin: var(--logo-margin-vertical) var(--logo-margin-horizontal);
     border-radius: 50%;
     overflow: hidden;
 }
@@ -163,23 +163,23 @@ body {
 }
 
 
-.in-logo {
+.in-logo-droplist {
     overflow: hidden;
     transition: height var(--animation-timing);
     position: fixed;
     top: calc(var(--navbar-height));
     right: 2px;
     width: 80px;
-    background: var(--in-logo-droplist-color);
+    background: var(--in-logo-droplist-droplist-color);
     border-radius: 5px;
 }
-#toggle-in-logo:checked ~ .in-logo {
+#toggle-in-logo-droplist:checked ~ .in-logo-droplist {
     height: 100px;
 }
-#toggle-in-logo:not(:checked) ~ .in-logo {
+#toggle-in-logo-droplist:not(:checked) ~ .in-logo-droplist {
     height: 0;
 }
-.in-logo * {
+.in-logo-droplist * {
     display: flex;
     justify-content: center;
     color: white;

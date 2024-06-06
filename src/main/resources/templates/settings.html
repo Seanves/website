@@ -7,6 +7,9 @@
 </head>
 
 <body>
+    <div th:insert="~{components/navbar}"></div>
+    <div th:insert="~{components/sidebar}"></div>
+
     <div class="container">
         <div>
             <label class="big-logo" id="big-logo" th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
@@ -24,13 +27,12 @@
     </div>
 
     <script>
+        const bigLogo = document.getElementById('big-logo');
+
         document.getElementById('color-input').addEventListener('input', function(event) {
             var color = event.target.value;
-            document.getElementById('big-logo').style.backgroundColor = color;
+            bigLogo.style.backgroundColor = color;
         });
     </script>
-
-    <div th:insert="~{common/navbar}"></div>
-    <div th:insert="~{common/sidebar}"></div>
 </body>
 </html>

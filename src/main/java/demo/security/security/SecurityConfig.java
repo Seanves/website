@@ -1,26 +1,26 @@
 package demo.security.security;
 
-import demo.security.services.PersonDetailsService;
+import demo.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final PersonDetailsService personDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
 
     @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService) {
-        this.personDetailsService = personDetailsService;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
 
@@ -35,13 +35,13 @@ public class SecurityConfig {
                                   .defaultSuccessUrl("/", true).permitAll()
                 .and().logout().logoutUrl("/process_logout")
                                .logoutSuccessUrl("/login")
-                .and().userDetailsService(personDetailsService)
+                .and().userDetailsService(userDetailsServiceImpl)
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new StandardPasswordEncoder("saltOIGD");  //sha256
+        return new BCryptPasswordEncoder();
     }
 
 }

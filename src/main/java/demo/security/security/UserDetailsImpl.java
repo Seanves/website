@@ -1,35 +1,35 @@
 package demo.security.security;
 
-import demo.security.entities.Person;
+import demo.security.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class PersonDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
-    private Person person;
+    private final User user;
 
 
-    public PersonDetails(Person person) {
-        this.person = person;
+    public UserDetailsImpl(User user) {
+        this.user = user;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return person.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return person.getUsername();
+        return user.getUsername();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PersonDetails implements UserDetails {
         return true;
     }
 
-    public Person getPerson() {
-        return this.person;
+    public User getPerson() {
+        return this.user;
     }
 }

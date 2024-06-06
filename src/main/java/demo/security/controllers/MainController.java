@@ -1,12 +1,13 @@
 package demo.security.controllers;
 
-import demo.security.services.PersonService;
-import demo.security.entities.Person;
-import demo.security.security.PersonDetails;
-import demo.security.util.ColorValidator;
-import demo.security.util.PersonValidator;
+import demo.security.entities.User;
+import demo.security.entities.dto.UserDTO;
+import demo.security.services.UserService;
+import demo.security.security.UserDetailsImpl;
+import demo.security.util.UserDTOValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MainController {
 
-    @Autowired private final PersonValidator personValidator;
-    @Autowired private final PersonService personService;
-//    @Autowired private final ColorValidator colorValidator;
+    @Autowired private final UserDTOValidator userDTOValidator;
+    @Autowired private final UserService userService;
 
 
     @GetMapping
@@ -40,17 +40,17 @@ public class MainController {
     }
 
     @GetMapping("/register")
-    public String register(@ModelAttribute Person person) {
+    public String register(@ModelAttribute UserDTO userDTO) {
         return "auth/register";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute @Valid Person person, BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
+    public String register(@ModelAttribute @Valid UserDTO userDTO, BindingResult bindingResult) {
+        userDTOValidator.validate(userDTO, bindingResult);
         if(bindingResult.hasErrors()) {
             return "auth/register";
         }
-        personService.register(person);
+        userService.register(userDTO);
         return "auth/login";
     }
 
@@ -72,12 +72,7 @@ public class MainController {
 
     @PostMapping("/changeColor")
     public String changeColor(@RequestParam String color, Model model) {
-//        String error = colorValidator.validate(color);
-//        if(error != null) {
-//            model.addAttribute("error", error);
-//            return "settings";
-//        }
-        personService.changeColor(getCurrentPerson(), color);
+        userService.changeColor(getCurrentPerson(), color);
         return "settings";
     }
 
@@ -92,23 +87,10 @@ public class MainController {
         return "hello";
     }
 
-//    @GetMapping("/changeYear")
-//    public String changeYear(@RequestParam int year) {
-//        personService.changeYear(getCurrentPerson(), year);
-//        return "hello";
-//    }
 
-//    @GetMapping("/changeColor")
-//    public String changeYear(@RequestParam String color) {
-//        System.out.println("color: " + color);
-//        personService.changeColor(getCurrentPerson(), color);
-//        return "hello";
-//    }
-
-
-    private Person getCurrentPerson() {
+    private User getCurrentPerson() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails)authentication.getPrincipal();
-        return personDetails.getPerson();
+        UserDetailsImpl userDetailsImpl = (UserDetailsImpl)authentication.getPrincipal();
+        return userDetailsImpl.getPerson();
     }
 }
