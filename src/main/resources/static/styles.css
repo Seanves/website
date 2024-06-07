@@ -1,11 +1,25 @@
 
 :root {
-    --sidebar-color: #333;
-    --sidebar-button-color: #868181;
-    --navbar-color: #313131;
-    --navbar-items-color: #4d4d4d;
-    --in-logo-droplist-color: #808080;
-    --auth-color: #36363b;
+    --sidebar-color-light:          white;
+    --sidebar-button-color-light:   grey;
+    --navbar-color-light:           white;
+    --navbar-items-color-light:     #8080809c;
+    --in-logo-droplist-color-light: lightgrey;
+    --auth-color-light:             white;
+
+    --sidebar-color-dark:          #333;
+    --sidebar-button-color-dark:   #868181;
+    --navbar-color-dark:           #313131;
+    --navbar-items-color-dark:     #4d4d4d;
+    --in-logo-droplist-color-dark: #808080;
+    --auth-color-dark:             #36363b;
+
+    --sidebar-color:          var(--sidebar-color-dark);
+    --sidebar-button-color:   var(--sidebar-button-color-dark);
+    --navbar-color:           var(--navbar-color-dark);
+    --navbar-items-color:     var(--navbar-items-color-dark);
+    --in-logo-droplist-color: var(--in-logo-droplist-color-dark);
+    --auth-color:             var(--auth-color-dark);
 
     --auth-border: 1px solid #70777b;
 
@@ -16,7 +30,9 @@
     --sidebar-height: calc(var(--sidebar-lines-gap) * 3 + var(--sidebar-lines-gap) * 2);
     --sidebar-open-line-width: calc(var(--sidebar-height) * 1.41421356237);
     --sidebar-darkening-opacity: 0.5;
-    --animation-timing: 200ms ease-out;
+
+    --sidebar-animation-timing: 200ms ease-out;
+    --color-mode-toggle-animation-timing: 300ms linear;
 
     --navbar-height: 50px;
     --logo-size: 38px;
@@ -25,7 +41,11 @@
 }
 
 body {
-    margin: 0
+    margin: 0;
+}
+
+* {
+    transition: background var(--color-mode-toggle-animation-timing);
 }
 
 .sidebar-toggle {
@@ -56,9 +76,9 @@ body {
     background-color: var(--sidebar-button-color);
     border-radius: var(--sidebar-line-height);
     transform-origin: left center;
-    transition: opacity var(--animation-timing), width var(--animation-timing),
-    rotate var(--animation-timing), translate var(--animation-timing),
-    background-color var(--animation-timing);
+    transition: opacity var(--sidebar-animation-timing), width var(--sidebar-animation-timing),
+    rotate var(--sidebar-animation-timing), translate var(--sidebar-animation-timing),
+    background-color var(--sidebar-animation-timing);
 }
 
 .sidebar-toggle input {
@@ -72,11 +92,10 @@ body {
 .sidebar {
     position: fixed;
     z-index: 2;
-    transition: translate var(--animation-timing);
+    transition: translate var(--sidebar-animation-timing), background var(--color-mode-toggle-animation-timing);
     translate: -100%;
     padding: calc(var(--sidebar-height) + var(--sidebar-margin) + 1rem) 1rem 0.5rem;
     background-color: var(--sidebar-color);
-    /* color: var(--background); */
     width: 180px;
     height: 100vh;
 }
@@ -100,7 +119,7 @@ body {
     background: black;
     opacity: 0;
 
-    transition: opacity var(--animation-timing);
+    transition: opacity var(--sidebar-animation-timing);
     visibility: hidden;
 }
 
@@ -141,6 +160,7 @@ body {
     margin: var(--logo-margin-vertical) var(--logo-margin-horizontal);
     border-radius: 50%;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .big-logo {
@@ -150,13 +170,6 @@ body {
     margin: var(--logo-margin-vertical) var(--logo-margin-horizontal);
     border-radius: 50%;
     overflow: hidden;
-}
-
-
-.green {
-    color: green;
-    font-family: "Roboto Light", serif;
-    font-size: 24px;
 }
 
 
@@ -173,7 +186,8 @@ body {
 
 .in-logo-droplist {
     overflow: hidden;
-    transition: height var(--animation-timing);
+    transition: height var(--sidebar-animation-timing),
+                background var(--color-mode-toggle-animation-timing);
     position: fixed;
     top: calc(var(--navbar-height));
     right: 2px;
@@ -247,4 +261,16 @@ body {
     color: red;
     font-size: 0.8em;
     margin: 0px 2px;
+}
+
+
+.color-mode-toggle {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    background: var(--navbar-color);
+    float: right;
+    margin: var(--logo-margin-vertical) 0;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
 }

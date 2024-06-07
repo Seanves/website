@@ -1,6 +1,12 @@
+
+<script src="js/color-mode-toggle.js"></script>
+
 <nav class="navbar">
+
     <div th:if="${#authentication != null}">
-        <label for="toggle-in-logo-droplist" class="logo" th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
+
+        <label for="toggle-in-logo-droplist" class="logo"
+               th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
             <img src="images/profile_icon.svg">
         </label>
         <input type="checkbox" id="toggle-in-logo-droplist" style="display: none">
@@ -13,5 +19,11 @@
                 <button type="submit" style="color: black">Logout</button>
             </form>
         </div>
+
     </div>
+
+    <div class="color-mode-toggle" onclick="toggleColorMode()">
+        <img id="colorModeToggleSvg" src="images/dark-mode.svg">
+    </div>
+
 </nav>
