@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotBlank(message = "Name mustn't be empty")
     @Size(min = 5, max = 20, message = "Name must be from 5 to 20 chars")
     private String username;
 
-    @NotBlank(message = "Password mustn't be empty")
+    @Size(min = 5, max = 30, message = "Password must be from 5 to 30 chars")
     private String password;
 
 }

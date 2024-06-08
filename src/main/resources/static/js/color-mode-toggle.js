@@ -5,7 +5,9 @@ const colorVars = [
     "--sidebar-button-color",
     "--navbar-items-color",
     "--in-logo-droplist-color",
-    "--auth-color"
+    "--auth-color",
+    "--main-background-color",
+    "--main-color"
 ];
 
 
@@ -36,7 +38,7 @@ function changeColors(isLight) {
 
 function updateToggleButton(isLight) {
     let svgImage = document.getElementById('colorModeToggleSvg');
-    svgImage.src = isLight ? "images/light-mode.svg" : "images/dark-mode.svg";
+    svgImage.src = isLight ? "images/light-mode-button.svg" : "images/dark-mode-button.svg";
 }
 
 function isLightMode() {

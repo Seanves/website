@@ -1,18 +1,22 @@
 
 :root {
     --sidebar-color-light:          white;
-    --sidebar-button-color-light:   grey;
+    --sidebar-button-color-light:   #868181;
     --navbar-color-light:           white;
     --navbar-items-color-light:     #8080809c;
     --in-logo-droplist-color-light: lightgrey;
     --auth-color-light:             white;
+    --main-background-color-light:  white;
+    --main-color-light:             black;
 
     --sidebar-color-dark:          #333;
     --sidebar-button-color-dark:   #868181;
     --navbar-color-dark:           #313131;
     --navbar-items-color-dark:     #4d4d4d;
-    --in-logo-droplist-color-dark: #808080;
-    --auth-color-dark:             #36363b;
+    --in-logo-droplist-color-dark: #4c4c4c;
+    --auth-color-dark:             #333338;
+    --main-background-color-dark:  #252525;
+    --main-color-dark:             white;
 
     --sidebar-color:          var(--sidebar-color-dark);
     --sidebar-button-color:   var(--sidebar-button-color-dark);
@@ -20,6 +24,8 @@
     --navbar-items-color:     var(--navbar-items-color-dark);
     --in-logo-droplist-color: var(--in-logo-droplist-color-dark);
     --auth-color:             var(--auth-color-dark);
+    --main-background-color:  var(--main-background-color-dark);
+    --main-color:             var(--main-color-dark);
 
     --auth-border: 1px solid #70777b;
 
@@ -29,7 +35,7 @@
     --sidebar-margin: calc((var(--navbar-height) - (var(--sidebar-line-height) * 3 + var(--sidebar-lines-gap) * 2)) / 2);
     --sidebar-height: calc(var(--sidebar-lines-gap) * 3 + var(--sidebar-lines-gap) * 2);
     --sidebar-open-line-width: calc(var(--sidebar-height) * 1.41421356237);
-    --sidebar-darkening-opacity: 0.5;
+    --sidebar-darkening-opacity: 40%;
 
     --sidebar-animation-timing: 200ms ease-out;
     --color-mode-toggle-animation-timing: 300ms linear;
@@ -38,10 +44,16 @@
     --logo-size: 38px;
     --logo-margin-vertical: calc((var(--navbar-height) - var(--logo-size)) / 2);
     --logo-margin-horizontal: var(--logo-margin-vertical);
+
+    --color-mode-toggle-size: var(--logo-size);
+    --color-mode-toggle-margin-vertical: var(--logo-margin-vertical);
+    --color-mode-toggle-margin-horizontal: 0;
 }
 
 body {
     margin: 0;
+    background: var(--main-background-color);
+    color: var(--main-color);
 }
 
 * {
@@ -141,7 +153,7 @@ body {
     min-width: 100vw;
     height: var(--navbar-height);
     background: var(--navbar-color);
-    box-shadow: 0px 1px 2px 1px black;
+    box-shadow: 0 1px 2px #02020299;
 }
 
 
@@ -193,7 +205,7 @@ body {
     right: 2px;
     width: 80px;
     background: var(--in-logo-droplist-color);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 #toggle-in-logo-droplist:checked ~ .in-logo-droplist {
     height: 100px;
@@ -209,7 +221,8 @@ body {
 
 
 .auth-page {
-    background: #252525;
+    background: var(--main-background-color);
+    color: var(--main-color);
 }
 
 .auth {
@@ -218,7 +231,7 @@ body {
     top: 50%;
     transform: translate(-50%,-60%) scale(2);
     padding: 20px;
-    color: white;
+    color: var(--main-color);
     background: var(--auth-color);
     box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.75);
 }
@@ -239,7 +252,6 @@ body {
 
 .auth > form > input[type="submit"] {
     background: var(--auth-color);
-    color: white;
     border: var(--auth-border);
     border-radius: 3px;
     padding: 2px 6px;
@@ -251,10 +263,7 @@ body {
     display: block;
     margin: 10px auto;
     width: fit-content;
-}
-
-.auth a {
-    color: white;
+    color: var(--main-color)
 }
 
 .auth-error {
@@ -264,13 +273,21 @@ body {
 }
 
 
-.color-mode-toggle {
-    width: var(--logo-size);
-    height: var(--logo-size);
-    background: var(--navbar-color);
+.navbar-color-mode-toggle {
+    width: var(--color-mode-toggle-size);
+    height: var(--color-mode-toggle-size);
     float: right;
-    margin: var(--logo-margin-vertical) 0;
+    margin: var(--color-mode-toggle-margin-vertical)
+            var(--color-mode-toggle-margin-horizontal);
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
+}
+
+.auth-color-mode-toggle {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 25px;
+    width: 25px;
 }

@@ -1,9 +1,6 @@
-
-<script src="js/color-mode-toggle.js"></script>
-
 <nav class="navbar">
 
-    <div th:if="${#authentication != null}">
+    <div sec:authorize="isAuthenticated()">
 
         <label for="toggle-in-logo-droplist" class="logo"
                th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
@@ -22,8 +19,6 @@
 
     </div>
 
-    <div class="color-mode-toggle" onclick="toggleColorMode()">
-        <img id="colorModeToggleSvg" src="images/dark-mode.svg">
-    </div>
+    <div class="navbar-color-mode-toggle" th:insert="~{components/color-mode-toggle}"></div>
 
 </nav>

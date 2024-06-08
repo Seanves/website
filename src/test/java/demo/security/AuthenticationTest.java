@@ -78,9 +78,9 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
     public void testAdminPageAccessDeniedForNotAdmin() throws Exception {
-        mockMvc.perform(get("/admin"))
+        mockMvc.perform(get("/admin")
+                .with(user(adminUserDetails)))
                 .andExpect(status().isForbidden());
     }
 
