@@ -157,7 +157,7 @@ body {
 }
 
 
-.container {
+.content {
     overflow: auto;
     max-height: calc(100vh - var(--sidebar-height) * 2);
     overflow-wrap: break-word;
@@ -266,8 +266,15 @@ body {
     color: var(--main-color)
 }
 
-.auth-error {
+.error {
     color: red;
+}
+
+.success {
+    color: green;
+}
+
+.error .success {
     font-size: 0.8em;
     margin: 0px 2px;
 }
@@ -290,4 +297,5 @@ body {
     right: 5px;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }

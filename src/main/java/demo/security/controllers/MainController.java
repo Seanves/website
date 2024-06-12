@@ -1,14 +1,13 @@
 package demo.security.controllers;
 
 import demo.security.entities.User;
+import demo.security.entities.dto.PasswordChangeDTO;
 import demo.security.entities.dto.UserDTO;
 import demo.security.services.UserService;
 import demo.security.security.UserDetailsImpl;
 import demo.security.util.UserDTOValidator;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,16 +20,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
-@RequiredArgsConstructor
 public class MainController {
 
-    @Autowired private final UserDTOValidator userDTOValidator;
-    @Autowired private final UserService userService;
+    private final UserDTOValidator userDTOValidator;
+    private final UserService userService;
+
+    public MainController(UserDTOValidator userDTOValidator, UserService userService) {
+        this.userDTOValidator = userDTOValidator;
+        this.userService = userService;
+    }
 
 
     @GetMapping
     public String mainPage(@RequestParam(required = false) String name, Model model) {
-        model.addAttribute("name", name == null ? getCurrentPerson().getUsername() : name);
+        model.addAttribute("name", name == null ? getCurrentUser().getUsername() : name);
         return "main";
     }
 
@@ -66,13 +69,7 @@ public class MainController {
     }
 
     @GetMapping("/settings")
-    public String settings() {
-        return "settings";
-    }
-
-    @PostMapping("/changeColor")
-    public String changeColor(@RequestParam String color, Model model) {
-        userService.changeColor(getCurrentPerson(), color);
+    public String settings(@ModelAttribute PasswordChangeDTO passwordChangeDTO) {
         return "settings";
     }
 
@@ -81,16 +78,31 @@ public class MainController {
         return "admin";
     }
 
-    @GetMapping("/printPerson")
-    public String printPerson() {
-        System.out.println(getCurrentPerson());
-        return "hello";
+    @PostMapping("/changeColor")
+    public String changeColor(@RequestParam String color, Model model) {
+        userService.changeColor(getCurrentUser(), color);
+        return "settings";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@ModelAttribute PasswordChangeDTO passwordChangeDTO, BindingResult br, Model model) {
+        User user = getCurrentUser();
+
+        boolean success = userService.changePassword(user, passwordChangeDTO.getNewPassword(),
+                                                        passwordChangeDTO.getOldPassword(), br);
+
+        if (success) {
+            model.addAttribute("passwordChangeMessage", "Password successfully changed");
+        }
+
+        return "settings";
     }
 
 
-    private User getCurrentPerson() {
+
+    private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetailsImpl = (UserDetailsImpl)authentication.getPrincipal();
-        return userDetailsImpl.getPerson();
+        return userDetailsImpl.getUser();
     }
 }

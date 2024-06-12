@@ -2,6 +2,7 @@ package demo.security;
 
 import demo.security.entities.User;
 import demo.security.entities.dto.UserDTO;
+import demo.security.repositories.UserRepository;
 import demo.security.security.UserDetailsImpl;
 import demo.security.services.UserService;
 
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,11 +32,25 @@ public class AuthenticationTest {
 
     private static UserDetails userDetails;
     private static UserDetails adminUserDetails;
+    private static UserDetails userToChangePasswordDetails;
 
+    private static final String TEST_USERNAME1 = "test_name",
+                                TEST_PASSWORD1 = "test_password",
+                                TEST_USERNAME2 = "test_name2",
+                                TEST_PASSWORD2 = "test_password2";
 
     @BeforeAll
-    public static void beforeAll() {
-        userDetails = new UserDetailsImpl(new User());
+    public static void beforeAll(@Autowired UserService userService,
+                                 @Autowired UserRepository userRepository) {
+
+        userService.register(new UserDTO(TEST_USERNAME1, TEST_PASSWORD1));
+        User userToChangePassword = userRepository.findByUsername(TEST_USERNAME1).orElseThrow();
+        userToChangePasswordDetails = new UserDetailsImpl(userToChangePassword);
+
+        userService.register(new UserDTO(TEST_USERNAME2, TEST_PASSWORD2));
+        User user = userRepository.findByUsername(TEST_USERNAME2).orElseThrow();
+        userDetails = new UserDetailsImpl(user);
+
         User admin = new User();
         admin.setRole("ROLE_ADMIN");
         adminUserDetails = new UserDetailsImpl(admin);
@@ -53,14 +67,14 @@ public class AuthenticationTest {
     }
 
     @Test
-    public void testUnauthenticatedAccess() throws Exception {
+    public void testUnauthenticatedAccessFailure() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/login"));
+                .andExpect(redirectedUrlPattern("**/login"));
     }
 
     @Test
-    public void testSuccessRegistration() throws Exception {
+    public void testSuccessfulRegistration() throws Exception {
         mockMvc.perform(post("/register")
                         .param("username", "username")
                         .param("password", "password")
@@ -68,6 +82,26 @@ public class AuthenticationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("auth/login"))
                 .andExpect(model().hasNoErrors());
+    }
+
+    @Test
+    public void testSuccessfulLogin() throws Exception {
+        mockMvc.perform(post("/process_login")
+                        .param("username", TEST_USERNAME2)
+                        .param("password", TEST_PASSWORD2)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+    }
+
+    @Test
+    public void testUnsuccessfulLogin() throws Exception {
+        mockMvc.perform(post("/process_login")
+                        .param("username", "wrong")
+                        .param("password", "wrong")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?error"));
     }
 
     @Test
@@ -80,7 +114,7 @@ public class AuthenticationTest {
     @Test
     public void testAdminPageAccessDeniedForNotAdmin() throws Exception {
         mockMvc.perform(get("/admin")
-                .with(user(adminUserDetails)))
+                .with(user(userDetails)))
                 .andExpect(status().isForbidden());
     }
 
@@ -115,6 +149,31 @@ public class AuthenticationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("auth/register"))
                 .andExpect(model().attributeHasFieldErrors("userDTO", "username"));
+    }
+
+    @Test
+    public void testSuccessfulPasswordChange() throws Exception {
+        mockMvc.perform(post("/changePassword")
+                        .with(user(userToChangePasswordDetails))
+                        .param("oldPassword", TEST_PASSWORD1)
+                        .param("newPassword", "newPassword1234")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings"))
+                .andExpect(model().hasNoErrors());
+
+    }
+
+    @Test
+    public void testUnsuccessfulPasswordChange() throws Exception {
+        mockMvc.perform(post("/changePassword")
+                        .with(user(userToChangePasswordDetails))
+                        .param("oldPassword", "wrong")
+                        .param("newPassword", "wrong")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings"))
+                .andExpect(model().hasErrors());
     }
 
 }

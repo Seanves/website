@@ -28,18 +28,26 @@ public class UserDTOValidator implements Validator {
     public void validate(Object o, Errors errors) {
         UserDTO user = (UserDTO)o;
 
-        if (user.getPassword() .equals( user.getUsername()) && !user.getPassword().isBlank()) {
-            errors.rejectValue("password", "", "Password and name are the same");
-        }
-
         if (user.getUsername().contains(" ")) {
             errors.rejectValue("username", "", "Username contains space");
         }
 
+        validatePassword(user.getPassword(), user.getUsername(), errors, "password");
+
         try {
             userDetailsService.loadUserByUsername(user.getUsername());
-            errors.rejectValue("username", "", "Name already taken");
+            errors.rejectValue("username", "", "Username already taken");
         } catch (UsernameNotFoundException e) {}
 
+    }
+
+    public void validatePassword(String password, String username, Errors errors, String field) {
+        if (password.equals(username) && !password.isBlank()) {
+            errors.rejectValue(field, "", "Password and name are the same");
+        }
+
+        if (password.contains(" ")) {
+            errors.rejectValue(field, "", "Password contains space");
+        }
     }
 }

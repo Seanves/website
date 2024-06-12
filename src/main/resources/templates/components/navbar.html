@@ -3,7 +3,7 @@
     <div sec:authorize="isAuthenticated()">
 
         <label for="toggle-in-logo-droplist" class="logo"
-               th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
+               th:style="${'background: ' + #authentication.getPrincipal().getUser().getColor()}">
             <img src="images/profile_icon.svg">
         </label>
         <input type="checkbox" id="toggle-in-logo-droplist" style="display: none">

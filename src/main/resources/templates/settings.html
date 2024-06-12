@@ -11,20 +11,47 @@
     <div th:insert="~{components/sidebar}"></div>
     <div th:insert="~{components/navbar}"></div>
 
-    <div class="container">
+    <div class="content">
         <div>
-            <label class="big-logo" id="big-logo" th:style="${'background: ' + #authentication.getPrincipal().getPerson().getColor()}">
+            <label class="big-logo" id="big-logo" th:style="${'background: ' + #authentication.getPrincipal().getUser().getColor()}">
                 <img src="images/profile_icon.svg">
             </label>
-            <span th:text="${#authentication.getPrincipal().getPerson().getUsername()}" style="font-size: 30px; vertical-align: top"></span>
+            <span th:text="${#authentication.getPrincipal().getUser().getUsername()}" style="font-size: 30px; vertical-align: top"></span>
         </div>
+
         <form action="/changeColor" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <label for="color-input">Change color:</label>
-            <input type="color" id="color-input" name="color" required  th:value="${#authentication.getPrincipal().getPerson().getColor()}">
+
+            <label for="color-input">Color:</label>
+            <input type="color" id="color-input" name="color" required
+                   th:value="${#authentication.getPrincipal().getUser().getColor()}">
+
             <button type="submit">Ok</button>
         </form>
-        <p th:if="${error != null}" style="color:red" th:text="${error}"></p>
+
+        <br>
+
+        <b>Change password</b>
+        <form action="/changePassword" th:object="${passwordChangeDTO}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <div>
+                <label for="oldPassword">Old password:</label>
+                <input type="password" th:field="*{oldPassword}" id="oldPassword" required>
+                <div th:if="${#fields.hasErrors('oldPassword')}" th:errors="*{oldPassword}" class="error"></div>
+            </div>
+
+            <div>
+                <label for="newPassword">New password:</label>
+                <input type="password" th:field="*{newPassword}" id="newPassword" required>
+                <div th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="error"></div>
+            </div>
+
+            <div th:if="${passwordChangeMessage != null}" class="success"
+                 th:text="${passwordChangeMessage}"></div>
+
+            <button type="submit">Ok</button>
+        </form>
     </div>
 
     <script>

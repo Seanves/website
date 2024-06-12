@@ -19,7 +19,7 @@
             <label for="password">Password:</label>
             <input type="password" name="password" id="password">
 
-            <div class="auth-error" th:if="${param.error}">Wrong login or password</div>
+            <div class="error" th:if="${param.error}">Wrong login or password</div>
 
             <input type="submit" value="Login"/>
 
