@@ -47,8 +47,9 @@
                 <div th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="error"></div>
             </div>
 
-            <div th:if="${passwordChangeMessage != null}" class="success"
-                 th:text="${passwordChangeMessage}"></div>
+            <div th:if="${passwordChangedSuccessfully}" class="success">
+                Password successfully changed
+            </div>
 
             <button type="submit">Ok</button>
         </form>

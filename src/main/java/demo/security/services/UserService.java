@@ -1,9 +1,9 @@
 package demo.security.services;
 
 import demo.security.entities.User;
+import demo.security.entities.dto.PasswordChangeDTO;
 import demo.security.entities.dto.UserDTO;
 import demo.security.repositories.UserRepository;
-import demo.security.util.UserDTOValidator;
 import jakarta.validation.Validator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,21 +15,20 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserDTOValidator userDTOValidator;
-    private final Validator defaultValidator;
+    private final Validator validator;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       UserDTOValidator userDTOValidator, Validator defaultValidator) {
+                                                                    Validator validator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userDTOValidator = userDTOValidator;
-        this.defaultValidator = defaultValidator;
+        this.validator = validator;
     }
 
 
     public void register(UserDTO userDTO) {
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         User user = new User(userDTO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
@@ -38,23 +37,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean changePassword(User user, String newPassword, String oldPassword, BindingResult br) {
+    public boolean changePassword(User user, PasswordChangeDTO dto, BindingResult br) {
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            br.rejectValue("oldPassword", "", "Wrong old password");
-        }
-        if (newPassword.equals(oldPassword)) {
-            br.rejectValue("newPassword", "", "New password is the same as current");
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            br.rejectValue("oldPassword", "", "Incorrect old password");
         }
 
-        userDTOValidator.validatePassword(newPassword, user.getUsername(), br, "newPassword");
-
-        var violations = defaultValidator.validateValue(UserDTO.class, "password", newPassword);
-        violations.forEach(v ->  System.out.println("violation = " + v.getMessage()));
+        var violations = validator.validateValue(UserDTO.class, "password", dto.getNewPassword());
+        violations.forEach(v -> br.rejectValue("newPassword", "", v.getMessage()));
 
         if (br.hasErrors()) { return false; }
 
-        user.setPassword( passwordEncoder.encode(newPassword) );
+        String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
         return true;
     }

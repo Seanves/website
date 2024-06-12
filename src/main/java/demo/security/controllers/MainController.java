@@ -5,7 +5,6 @@ import demo.security.entities.dto.PasswordChangeDTO;
 import demo.security.entities.dto.UserDTO;
 import demo.security.services.UserService;
 import demo.security.security.UserDetailsImpl;
-import demo.security.util.UserDTOValidator;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.Authentication;
@@ -22,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
 
-    private final UserDTOValidator userDTOValidator;
     private final UserService userService;
 
-    public MainController(UserDTOValidator userDTOValidator, UserService userService) {
-        this.userDTOValidator = userDTOValidator;
+    public MainController(UserService userService) {
         this.userService = userService;
     }
 
@@ -49,7 +46,6 @@ public class MainController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute @Valid UserDTO userDTO, BindingResult bindingResult) {
-        userDTOValidator.validate(userDTO, bindingResult);
         if(bindingResult.hasErrors()) {
             return "auth/register";
         }
@@ -81,20 +77,15 @@ public class MainController {
     @PostMapping("/changeColor")
     public String changeColor(@RequestParam String color, Model model) {
         userService.changeColor(getCurrentUser(), color);
-        return "settings";
+        return "redirect:/settings";
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(@ModelAttribute PasswordChangeDTO passwordChangeDTO, BindingResult br, Model model) {
-        User user = getCurrentUser();
+    public String changePassword(@ModelAttribute @Valid PasswordChangeDTO passwordChangeDTO,
+                                                                BindingResult br, Model model) {
+        boolean success = userService.changePassword(getCurrentUser(), passwordChangeDTO, br);
 
-        boolean success = userService.changePassword(user, passwordChangeDTO.getNewPassword(),
-                                                        passwordChangeDTO.getOldPassword(), br);
-
-        if (success) {
-            model.addAttribute("passwordChangeMessage", "Password successfully changed");
-        }
-
+        model.addAttribute("passwordChangedSuccessfully", success);
         return "settings";
     }
 
